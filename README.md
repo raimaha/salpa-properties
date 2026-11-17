@@ -14,7 +14,7 @@ Each section of the page is marked with an `EDIT HERE` note so it's easy to find
 
 ## Still to fill in
 
-- Check the email address `info@salpaproperties.co.uk` matches the real mailbox
+- Contact email on the site: salpaproperties@hotmail.com
 
 ## Files
 
