@@ -231,7 +231,7 @@ html{scroll-behavior:smooth}</style>
 <div style="display: flex; gap: 14px; align-items: flex-start"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A5418" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-top: 3px; flex: none"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg><div><div style="font-size: 13px; color: #5A6669; text-transform: uppercase; letter-spacing: 0.12em">Location</div><span style="font-weight: 600">Based in Folkestone, Kent – meetings by appointment</span></div></div>
 </div>
 </div>
-<form name="contact" method="POST" action="/thank-you.html" data-netlify="true" netlify-honeypot="company-website" style="flex: 1.2 1 440px; min-width: 0; background: #FFFFFF; border: 1px solid #DEDAD2; border-radius: 6px; padding: 40px; display: flex; flex-direction: column; gap: 20px">
+<form id="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="company-website" style="flex: 1.2 1 440px; min-width: 0; background: #FFFFFF; border: 1px solid #DEDAD2; border-radius: 6px; padding: 40px; display: flex; flex-direction: column; gap: 20px">
 <input type="hidden" name="form-name" value="contact">
 <p style="display:none"><label>Leave this empty: <input name="company-website"></label></p>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px">
@@ -246,7 +246,8 @@ html{scroll-behavior:smooth}</style>
 <option>Something else</option>
 </select></div>
 <div style="display: flex; flex-direction: column; gap: 8px"><label for="f-msg" style="font-size: 14px; font-weight: 600">Message</label><textarea id="f-msg" name="message" rows="5" style="padding: 13px 14px; border: 1px solid #B9B3A8; border-radius: 4px; background: #FFFFFF; color: #1B2A2F; resize: vertical"></textarea></div>
-<button type="submit" style="align-self: flex-start; padding: 16px 30px; background: #1B2A2F; color: #FFFFFF; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; min-height: 48px">Send message</button>
+<div id="form-status" role="status" aria-live="polite" style="display: none; padding: 16px 18px; border-radius: 4px; font-weight: 500"></div>
+<button id="form-submit" type="submit" style="align-self: flex-start; padding: 16px 30px; background: #1B2A2F; color: #FFFFFF; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; min-height: 48px">Send message</button>
 </form>
 </div>
 </section>
@@ -279,5 +280,41 @@ html{scroll-behavior:smooth}</style>
 </footer>
 
 </div>
+
+<!-- Contact form: sends the message to Netlify Forms and shows a thank-you message on the same page -->
+<script>
+(function () {
+  var form = document.getElementById('contact-form');
+  if (!form) return;
+  var status = document.getElementById('form-status');
+  var button = document.getElementById('form-submit');
+  function show(msg, ok) {
+    status.textContent = msg;
+    status.style.display = 'block';
+    status.style.background = ok ? '#E8F0EC' : '#FBEAEA';
+    status.style.color = ok ? '#1E4D36' : '#8A1C1C';
+  }
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    button.disabled = true;
+    button.textContent = 'Sending…';
+    var body = new URLSearchParams(new FormData(form)).toString();
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body
+    }).then(function (res) {
+      if (!res.ok) throw new Error('Status ' + res.status);
+      form.reset();
+      show('Thank you – your message has been sent. We will be in touch shortly.', true);
+      button.textContent = 'Message sent';
+    }).catch(function () {
+      show('Sorry, your message could not be sent. Please email us at salpaproperties@hotmail.com or call 07733 455320.', false);
+      button.disabled = false;
+      button.textContent = 'Send message';
+    });
+  });
+})();
+</script>
 </body>
 </html>
