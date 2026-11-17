@@ -14,7 +14,6 @@ Each section of the page is marked with an `EDIT HERE` note so it's easy to find
 
 ## Still to fill in
 
-- `[YOUR PHONE NUMBER]`: the company phone number
 - Check the email address `info@salpaproperties.co.uk` matches the real mailbox
 
 ## Files
